@@ -1,21 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import _ from 'lodash';
+import { createBrowserHistory } from 'history';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from '../components/Login';
 import Register from '../components/Register';
 import Profile from '../components/Profile';
+import Header from '../components/Header';
+import Logout from '../components/Logout';
 
-const AppRouter = () => {
+export const history = createBrowserHistory();
+
+const AppRouter = ({ auth }) => {
   return (
-    <Router>
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+    <BrowserRouter>
+      <div>
+        {!_.isEmpty(auth.token) && <Header />}
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/logout" element={<Logout />} />
+          </Routes>
+        </div>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 };
 
@@ -24,3 +34,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(AppRouter);
+
+
+

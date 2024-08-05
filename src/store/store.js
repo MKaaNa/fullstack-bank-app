@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk'; // 'thunk' olarak import edilmeli
+import {thunk} from 'redux-thunk'; // 'thunk' olarak import edilmeli
 import authReducer from '../reducers/auth';
 import errorsReducer from '../reducers/errors';
 import profileReducer from '../reducers/profile';
