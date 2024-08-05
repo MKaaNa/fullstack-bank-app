@@ -42,7 +42,7 @@ class Login extends React.Component {
         errorMsg: {
           signin_error: ''
         }
-      });
+      }); 
       // login successful
       this.props.dispatch(initiateLogin(email, password));
     }
@@ -57,7 +57,7 @@ class Login extends React.Component {
   };
 
   render() {
-    const { errorMsg } = this.state;
+      const { errorMsg } = this.state;
     return (
       <div className="login-page">
         <div className="login-form-container">
@@ -106,5 +106,4 @@ class Login extends React.Component {
 const mapStateToProps = (state) => ({
   errors: state.errors
 });
-
 export default connect(mapStateToProps)(Login);
