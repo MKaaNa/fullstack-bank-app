@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { Form, Button } from 'react-bootstrap';
 import { registerNewUser } from '../actions/auth';
+import { resetErrors } from '../actions/errors';
 import { validateFields } from '../utils/common';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Routes, Route } from 'react-router-dom';
-
-
 
 class Register extends React.Component {
   state = {
@@ -20,6 +18,16 @@ class Register extends React.Component {
     errorMsg: '',
     isSubmitted: false
   };
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(prevProps.errors, this.props.errors)) {
+      this.setState({ errorMsg: this.props.errors });
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(resetErrors());
+  }
 
   registerUser = (event) => {
     event.preventDefault();
@@ -146,4 +154,8 @@ class Register extends React.Component {
   }
 }
 
-export default connect()(Register);
+const mapStateToProps = (state) => ({
+  errors: state.errors
+});
+
+export default connect(mapStateToProps)(Register);
