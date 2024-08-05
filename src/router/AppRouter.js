@@ -1,24 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // BrowserRouter'ı Router olarak adlandırmak yaygın bir yaklaşımdır
-import Login from '../components/Login'; // Doğru yol
-import Register from '../components/Register'; // Doğru yol
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from '../components/Login';
+import Register from '../components/Register';
+import Profile from '../components/Profile';
 
 const AppRouter = () => {
-    return (
-        <Router> {/* Router olarak adlandırdık */}
-            <div className="container">
-                <Routes> {/* Switch yerine Routes kullanıyoruz */}
-                    <Route path="/" element={<Login />} /> {/* component yerine element kullanıyoruz */}
-                    <Route path="/register" element={<Register />} />
-                </Routes>
-            </div>
-        </Router>
-    );
+  return (
+    <Router>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 };
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(AppRouter);

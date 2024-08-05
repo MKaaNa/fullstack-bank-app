@@ -2,6 +2,7 @@ import axios from 'axios';
 import { SIGN_IN, BASE_API_URL } from '../utils/constants';
 import { getErrors } from './errors';
 
+
 export const signIn = (user) => ({
   type: SIGN_IN,
   user
