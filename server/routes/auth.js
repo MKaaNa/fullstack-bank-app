@@ -32,6 +32,21 @@ Router.post('/signup', async (req, res) => {
       });
     }
 
+Router.post('/logout', authMiddleware, async (req, res) => {
+  try {
+    const { userid, access_token } = req.user;
+    await pool.query('delete from tokens where userid=$1 and access_token=$2', [
+      userid,
+      access_token
+    ]);
+    res.send();
+  } catch (error) {
+    res.status(400).send({
+      logout_error: 'Error while logging out..Try again later.'
+    });
+  }
+});
+
     const result = await pool.query(
       'select count(*) as count from bank_user where email=$1',
       [email]
