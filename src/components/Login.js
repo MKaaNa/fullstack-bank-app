@@ -6,6 +6,7 @@ import { initiateLogin } from '../actions/auth';
 import { resetErrors } from '../actions/errors';
 import { validateFields } from '../utils/common';
 import { Link } from 'react-router-dom';
+import './Login.css'; // CSS dosyasını import edin
 
 class Login extends React.Component {
   state = {
@@ -37,7 +38,7 @@ class Login extends React.Component {
         }
       });
     } else {
-       this.setState({
+      this.setState({
         errorMsg: {
           signin_error: ''
         }
@@ -59,15 +60,15 @@ class Login extends React.Component {
     const { errorMsg } = this.state;
     return (
       <div className="login-page">
-        <h1>Banking Application</h1>
-        <div className="login-form">
+        <div className="login-form-container">
+          <h1>Banking Application</h1>
           <Form onSubmit={this.handleLogin}>
             {errorMsg && errorMsg.signin_error && (
               <p className="errorMsg centered-message">
                 {errorMsg.signin_error}
               </p>
             )}
-            <Form.Group controlId="email">
+            <Form.Group className="form-input" controlId="email">
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="email"
@@ -76,7 +77,7 @@ class Login extends React.Component {
                 onChange={this.handleInputChange}
               />
             </Form.Group>
-            <Form.Group controlId="password">
+            <Form.Group className="form-input" controlId="password">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
@@ -85,13 +86,15 @@ class Login extends React.Component {
                 onChange={this.handleInputChange}
               />
             </Form.Group>
-            <div className="action-items">
-              <Button variant="primary" type="submit">
+            <div className="action-buttons">
+              <Button className="btn login-btn" type="submit">
                 Login
               </Button>
-              <Link to="/register" className="btn btn-secondary">
-                Create account
-              </Link>
+              <Button className="btn create-account-btn">
+                <Link to="/register" className="register-text">
+                  Create account
+                </Link>
+              </Button>
             </div>
           </Form>
         </div>
