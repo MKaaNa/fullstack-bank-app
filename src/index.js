@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client'; // 'react-dom/client' içeri aktarılır
 import AppRouter from './router/AppRouter';
 import { Provider } from 'react-redux';
 import store from './store/store';
@@ -8,11 +8,10 @@ import './css/main.scss';
 
 const rootElement = document.getElementById('root');
 
-
-
-ReactDOM.render(
+// React 18 ile birlikte createRoot kullanılır
+const root = ReactDOM.createRoot(rootElement);
+root.render(
     <Provider store={store}>
         <AppRouter />
-    </Provider>,
-    rootElement
+    </Provider>
 );
