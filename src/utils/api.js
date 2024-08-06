@@ -1,21 +1,56 @@
 import axios from 'axios';
-import { BASE_API_URL } from '../utils/constants';
+import { setAuthHeader, removeAuthHeader } from './common';
 
-
-// Axios instance
-const api = axios.create({
-  baseURL: BASE_API_URL, // Temel URL
-  headers: {
-    'Content-Type': 'application/json',
-    // Diğer gerekli başlıklar buraya eklenebilir
+export const get = async (url, params, shouldSetAuthHeader = true, shouldRemoveAuthHeader = false) => {
+  if (shouldSetAuthHeader) {
+    setAuthHeader();
   }
-});
 
-// GET isteği
-export const get = (url) => api.get(url);
+  try {
+    const result = await axios.get(url, { params });
+    return result;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  } finally {
+    if (shouldRemoveAuthHeader) {
+      removeAuthHeader();
+    }
+  }
+};
 
-// POST isteği
-export const post = (url, data) => api.post(url, data);
+export const post = async (url, params, shouldSetAuthHeader = true, shouldRemoveAuthHeader = false) => {
+  if (shouldSetAuthHeader) {
+    setAuthHeader();
+  }
 
-// PATCH isteği
-export const patch = (url, data) => api.patch(url, data);
+  try {
+    const result = await axios.post(url, params);
+    return result;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  } finally {
+    if (shouldRemoveAuthHeader) {
+      removeAuthHeader();
+    }
+  }
+};
+
+export const patch = async (url, params, shouldSetAuthHeader = true, shouldRemoveAuthHeader = false) => {
+  if (shouldSetAuthHeader) {
+    setAuthHeader();
+  }
+
+  try {
+    const result = await axios.patch(url, params);
+    return result;
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  } finally {
+    if (shouldRemoveAuthHeader) {
+      removeAuthHeader();
+    }
+  }
+};
