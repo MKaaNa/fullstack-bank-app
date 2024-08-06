@@ -18,7 +18,7 @@ export const initiateLogin = (email, password) => {
         password
       });
       const user = result.data;
-      localStorage.setItem('user_token', user.token);
+      localStorage.setItem('token', user.token);
       dispatch(signIn(user));
       dispatch(initiateGetProfile(user.email));
       history.push('/profile');
@@ -52,10 +52,12 @@ export const initiateLogout = () => {
       setAuthHeader();
       await axios.post(`${BASE_API_URL}/logout`);
       removeAuthHeader();
-      localStorage.removeItem('user_token');
+      localStorage.removeItem('token');
       return dispatch(signOut());
     } catch (error) {
       error.response && dispatch(getErrors(error.response.data));
     }
   };
 };
+
+
