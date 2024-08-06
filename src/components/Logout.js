@@ -11,7 +11,7 @@ const Logout = ({ dispatch }) => {
     dispatch(initiateLogout()).then(() => navigate('/'));
   }, [dispatch, navigate]);
 
-  return null; // Hiçbir şey render etmeyecek
+  return null; 
 };
 
 export default connect()(Logout);
