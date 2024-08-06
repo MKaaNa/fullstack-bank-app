@@ -36,4 +36,3 @@ CREATE TABLE transactions(
     account_id BIGINT NOT NULL,
     FOREIGN KEY(account_id) REFERENCES account(account_id)
 );
-view raw
