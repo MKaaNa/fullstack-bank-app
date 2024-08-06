@@ -8,7 +8,6 @@ import './css/main.scss';
 
 const rootElement = document.getElementById('root');
 
-// React 18 ile birlikte createRoot kullanılır
 const root = ReactDOM.createRoot(rootElement);
 root.render(
     <Provider store={store}>
