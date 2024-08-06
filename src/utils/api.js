@@ -1,7 +1,21 @@
-// src/utils/api.js
-
 import axios from 'axios';
+import { BASE_API_URL } from '../utils/constants';
 
-export const get = (url) => axios.get(url);
-export const post = (url, data) => axios.post(url, data);
-export const patch = (url, data) => axios.patch(url, data);
+// Axios instance
+const api = axios.create({
+  baseURL: BASE_API_URL, // Temel URL
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
+// GET isteği
+export const get = (url) => api.get(url);
+
+// POST isteği
+export const post = (url, data) => api.post(url, data);
+
+// PATCH isteği
+export const patch = (url, data) => api.patch(url, data);
+
+

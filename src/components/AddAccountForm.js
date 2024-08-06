@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { Form, Button } from 'react-bootstrap';
 import { validateFields } from '../utils/common';
 
+import { initiateAddAccntDetails } from '../actions/account'; 
 class AddAccountForm extends React.Component {
   state = {
     account_no: '',
@@ -12,7 +13,7 @@ class AddAccountForm extends React.Component {
     errorMsg: ''
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (!_.isEqual(prevProps.errors, this.props.errors)) {
       this.setState({ errorMsg: this.props.errors });
     }
@@ -25,37 +26,32 @@ class AddAccountForm extends React.Component {
     });
   };
 
-  handleAddAccount = (event) => {
+  handleOnSubmit = (event) => {
     event.preventDefault();
     const { account_no, bank_name, ifsc } = this.state;
     const fieldsToValidate = [{ account_no }, { bank_name }, { ifsc }];
-
     const allFieldsEntered = validateFields(fieldsToValidate);
+
     if (!allFieldsEntered) {
       this.setState({
-        errorMsg: {
-          add_error: 'Please enter all the fields.'
-        }
+        errorMsg: { add_error: 'Please fill all the fields.' }
       });
     } else {
-      this.props.handleAddAccount(this.state);
+      this.props.dispatch(initiateAddAccntDetails(account_no, bank_name, ifsc));
     }
   };
 
   render() {
     const { account_no, bank_name, ifsc, errorMsg } = this.state;
+
     return (
-      <div className="edit-account-form  col-md-6 offset-md-3">
-        <Form onSubmit={this.handleAddAccount} className="account-form">
+      <div className="edit-account-form col-md-6 offset-md-3">
+        <Form onSubmit={this.handleOnSubmit}>
           {errorMsg && errorMsg.add_error && (
             <p className="errorMsg centered-message">{errorMsg.add_error}</p>
           )}
-          <Form.Group controlId="type">
-            <Form.Label>Add account</Form.Label>
-          </Form.Group>
-          <hr />
-          <Form.Group controlId="accnt_no">
-            <Form.Label>Account number: </Form.Label>
+          <Form.Group controlId="account_no">
+            <Form.Label>Account number:</Form.Label>
             <Form.Control
               type="text"
               name="account_no"
@@ -64,8 +60,8 @@ class AddAccountForm extends React.Component {
               onChange={this.handleInputChange}
             />
           </Form.Group>
-          <Form.Group controlId="accnt_no">
-            <Form.Label>Bank name: </Form.Label>
+          <Form.Group controlId="bank_name">
+            <Form.Label>Bank name:</Form.Label>
             <Form.Control
               type="text"
               name="bank_name"
@@ -98,3 +94,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(AddAccountForm);
+

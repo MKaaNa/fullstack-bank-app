@@ -1,14 +1,14 @@
-// ../reducers/transactions.js
+import { SET_TRANSACTIONS, ADD_TRANSACTION } from '../utils/constants';
 
-const initialState = [];
-
-const transactionsReducer = (state = initialState, action) => {
+const transactionsReducer = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_TRANSACTION':
+    case SET_TRANSACTIONS:
+      return [...action.transactions];
+    case ADD_TRANSACTION:
       return [...state, action.transaction];
-    case 'REMOVE_TRANSACTION':
-      return state.filter(transaction => transaction.id !== action.id);
     default:
       return state;
   }
 };
+
+export default transactionsReducer;
