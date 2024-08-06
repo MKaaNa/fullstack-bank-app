@@ -8,6 +8,7 @@ import Register from '../components/Register';
 import Profile from '../components/Profile';
 import Header from '../components/Header';
 import Logout from '../components/Logout';
+import Account from '../components/Account';
 
 export const history = createBrowserHistory();
 
@@ -20,6 +21,7 @@ const AppRouter = ({ auth }) => {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/account" element={<Account />} /> {/* Burada düzeltme yapıldı */}
             <Route path="/profile" element={<Profile />} />
             <Route path="/logout" element={<Logout />} />
           </Routes>
@@ -34,6 +36,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(AppRouter);
-
-
-
