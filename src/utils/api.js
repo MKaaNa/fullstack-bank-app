@@ -6,6 +6,7 @@ const api = axios.create({
   baseURL: BASE_API_URL, // Temel URL
   headers: {
     'Content-Type': 'application/json',
+
   }
 });
 
@@ -17,5 +18,3 @@ export const post = (url, data) => api.post(url, data);
 
 // PATCH isteği
 export const patch = (url, data) => api.patch(url, data);
-
-
