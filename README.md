@@ -1,70 +1,139 @@
-# Getting Started with Create React App
+# Customer Information Query Screen
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a web application designed for querying, updating, and managing customer information. Users can save customer details, manage their active/passive status, and search among registered customers. The project uses **React** for the frontend, **Express.js** for the backend, and **PostgreSQL** as the database.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+1. [Technologies Used](#technologies-used)
+2. [Features](#features)
+3. [Installation and Setup](#installation-and-setup)
+4. [Usage](#usage)
+5. [Directory Structure](#directory-structure)
+6. [API Endpoints](#api-endpoints)
+7. [Database Schema](#database-schema)
+8. [Contributing](#contributing)
+9. [License](#license)
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend:** React
+- **Backend:** Node.js with Express.js
+- **Database:** PostgreSQL
+- **Other Libraries:** Axios, Material-UI, etc.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- **Customer Registration:** Save new customer details, including TCKN, name, date of birth, contact information, and more.
+- **Status Management:** Mark customers as active or passive, and filter them accordingly.
+- **Search Functionality:** Search customers by TCKN and view their stored details.
+- **Update Functionality:** Reactivate passive customers and update their status.
+- **Responsive Design:** User interface adapts to different screen sizes.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation and Setup
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Before you begin, ensure you have met the following requirements:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js and npm installed on your local machine
+- PostgreSQL installed and running
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Setup Instructions
 
-### `npm run eject`
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/your-repository.git
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. **Navigate to the project directory:**
+   ```bash
+   cd your-repository
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Install the dependencies:**
+   ```bash
+   npm install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. **Set up the database:**
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   - Create a PostgreSQL database.
+   - Run the SQL scripts to create necessary tables (e.g., `mvt_musteri`).
 
-## Learn More
+5. **Configure environment variables:**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   Create a `.env` file in the root directory with the following content:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   DB_HOST=your_database_host
+   DB_PORT=your_database_port
+   DB_USER=your_database_user
+   DB_PASS=your_database_password
+   DB_NAME=your_database_name
+   ```
 
-### Code Splitting
+6. **Run the application:**
+   ```bash
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Usage
 
-### Analyzing the Bundle Size
+Once the server is running, you can access the application in your browser at `http://localhost:3000`. The Customer Information Query Screen will allow you to:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Search for customers using their TCKN.
+- View, activate, or deactivate customer records.
+- Filter customers by their active or passive status.
 
-### Making a Progressive Web App
+## Directory Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+/project-root
+│
+├── /backend
+│   ├── /controllers
+│   ├── /models
+│   ├── /routes
+│   └── /database
+│
+├── /frontend
+│   ├── /src
+│   │   ├── /components
+│   │   ├── /screens
+│   │   ├── /services
+│   │   └── App.js
+│   └── /public
+│
+└── .env
+```
 
-### Advanced Configuration
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- **GET /customers:** Fetch all customers (active or passive).
+- **GET /customers/:tckn:** Fetch a specific customer by TCKN.
+- **PUT /customers/:tckn:** Update the status of a customer (active/passive).
+- **POST /customers:** Add a new customer.
 
-### Deployment
+## Database Schema
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The primary table in the PostgreSQL database is `mvt_musteri`, which stores customer details. Key columns include:
 
-### `npm run build` fails to minify
+- **tckn (Primary Key)**
+- **first_name**
+- **last_name**
+- **dob (Date of Birth)**
+- **status (Active/Passive)**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+By default, new customers are added with an active status.
+
+## Contributing
+
+If you'd like to contribute to this project, please fork the repository and use a feature branch. Pull requests are warmly welcome.
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+This README file provides a comprehensive overview of the project, including its features, setup instructions, and key technical details. You can further customize it as needed to match your specific project structure and requirements.
