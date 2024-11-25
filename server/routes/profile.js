@@ -26,7 +26,7 @@ Router.post('/profile', authMiddleware, async (req, res) => {
 
     // Perform the update query
     const result = await pool.query(
-      'UPDATE bank_user SET first_name=$1, last_name=$2 WHERE userid=$3 RETURNING userid, first_name, last_name, email',
+      'UPDATE bank_user SET first_name=$1, last_name=$2 WHERE userid=$3 RETURNING userid, first_name, last_name, personel_id',
       [first_name, last_name, req.user.userid]
     );
     res.send(result.rows[0]);

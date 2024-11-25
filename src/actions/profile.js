@@ -21,7 +21,7 @@ export const initiateUpdateProfile = (profileData) => {
   };
 };
 
-export const initiateGetProfile = (email) => {
+export const initiateGetProfile = (personel_id) => {
   return async (dispatch) => {
     try {
       setAuthHeader();

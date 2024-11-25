@@ -1,73 +1,66 @@
 /* Login.css */
 .login-page {
-    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .login-form-container {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  h1 {
-    color: #333;
-    margin-bottom: 20px; /* Başlığı form alanlarından biraz daha aşağıda konumlandırmak için */
-    text-align: center;
-  }
-  
-  .errorMsg {
-    color: #d9534f; /* Bootstrap danger color */
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  
-  .form-input {
-    margin-bottom: 15px;
-  }
-  
-  .action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%; /* Butonları kapsayıcı container ile uyumlu yapmak için */
-  }
-  
-  .action-buttons .btn {
-    width: 100%; /* Butonları tam genişlikte yapar */
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    text-align: center;
-  }
-  
-  .login-btn,
-  .create-account-btn {
-    background-color: #007bff; /* Mavi renk */
-    color: #fff; /* Beyaz yazı rengi */
-    border: none;
-  }
-  
-  .login-btn:hover,
-  .create-account-btn:hover {
-    background-color: #0056b3; /* Daha koyu mavi */
-  }
-  
-  .register-text {
-    color: #fff; /* Beyaz yazı rengi */
-    text-decoration: none; /* Link altını çizme */
-  }
-  
-  .register-text:hover {
-    color: #e0e0e0; /* Daha açık beyaz rengin üzerine hover efekti */
-  }
-  
+  background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px; /* İçeriğin kenarlardan biraz boşluk bırakmasını sağlar */
+}
+
+.login-form-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Daha belirgin bir gölge */
+  padding: 30px; /* Daha geniş iç padding */
+  width: 100%;
+  max-width: 400px; /* Formun daha geniş olmasını sağlar */
+  border: 2px solid #007bff; /* Mavi renkli bir çerçeve */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-title {
+  color: #333;
+  margin-bottom: 20px; /* Başlığın altındaki boşluğu artırır */
+  text-align: center;
+}
+
+.errorMsg {
+  color: #d9534f;
+  margin-bottom: 15px; /* Hata mesajının altındaki boşluğu artırır */
+  text-align: center;
+}
+
+.successMsg {
+  color: #5bc0de; /* Başarı mesajı için renk */
+  margin-bottom: 15px; /* Başarı mesajının altındaki boşluğu artırır */
+  text-align: center;
+}
+
+.form-input {
+  margin-bottom: 15px; /* Form elemanlarının arasındaki boşluğu artırır */
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Butonlar arasındaki boşluğu artırır */
+  width: 100%;
+}
+
+.action-buttons .login-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px; /* Buton metninin boyutunu artırır */
+  border-radius: 5px; /* Buton köşelerini daha yuvarlak yapar */
+  text-align: center;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.action-buttons .login-btn:hover {
+  background-color: #0056b3;
+}

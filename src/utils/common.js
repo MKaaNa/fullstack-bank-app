@@ -11,13 +11,16 @@ export const validateFields = (fieldsToValidate) => {
 };
 
 export const maintainSession = () => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    const decoded = jwtDecode(token);
+  const user_token = localStorage.getItem('user_token');
+  if (user_token) {
+    const currentPath = window.location.pathname;
+    if (currentPath === '/' || currentPath === '/register') {
+    
+    }
+    const decoded = jwtDecode(user_token);
     updateStore(decoded);
-    setAuthHeader(); // Auth başlıklarını ayarla
   } else {
-    removeAuthHeader(); // Auth başlıklarını kaldır
+  
   }
 };
 
@@ -33,13 +36,13 @@ export const removeAuthHeader = () => {
 };
 
 export const updateStore = (user) => {
-  const { userid, email } = user;
+  const { userid, personel_id } = user;
   store.dispatch(
     signIn({
       userid,
-      email,
+      personel_id,
       token: localStorage.getItem('user_token')
     })
   );
-  store.dispatch(initiateGetProfile(email));
+  store.dispatch(initiateGetProfile(personel_id));
 };

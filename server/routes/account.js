@@ -1,12 +1,12 @@
 const express = require('express');
 const authMiddleware = require('../middleware/auth');
 const { pool } = require('../db/connect');
-const Router = express.Router();
+const router = express.Router(); // 'Router' yerine 'router' kullanımı
 
 const getAccountByAccountId = async function (account_id) {
   try {
     const result = await pool.query(
-      'select * from account a inner join bank_user b on a.userid = b.userid where a.account_id=$1',
+      'SELECT * FROM account a INNER JOIN bank_user b ON a.userid = b.userid WHERE a.account_id=$1',
       [account_id]
     );
     return result.rows[0];
@@ -15,11 +15,11 @@ const getAccountByAccountId = async function (account_id) {
   }
 };
 
-async function getAccountByEmail(email) {
+async function getAccountByPersonelId(personel_id) {
   try {
     const result = await pool.query(
-      'select * from account a inner join bank_user b on a.userid = b.userid where b.email=$1',
-      [email]
+      'SELECT * FROM account a INNER JOIN bank_user b ON a.userid = b.userid WHERE b.personel_id=$1',
+      [personel_id]
     );
     delete result.rows[0].password;
     return result.rows[0];
@@ -28,52 +28,47 @@ async function getAccountByEmail(email) {
   }
 }
 
-// get account details by email
-Router.get('/account', authMiddleware, async (req, res) => {
+router.get('/account', authMiddleware, async (req, res) => {
   try {
-    const result = await getAccountByEmail(req.user.email);
-    if (result) {
-      res.send({ account: result });
+    const account = await getAccountByPersonelId(req.user.personel_id);
+    if (account) {
+      res.send({ account });
     } else {
-      res.status(400).send({
-        get_error: 'Account details does not exist.'
-      });
+      res.status(404).send({ get_error: 'Account details do not exist.' });
     }
   } catch (error) {
-    res.status(400).send({
-      get_error: 'Error while getting account details..Try again later.'
-    });
+    res.status(500).send({ get_error: `Error while getting account details: ${error.message}` });
   }
 });
 
-Router.post('/account', authMiddleware, async (req, res) => {
+router.post('/account', authMiddleware, async (req, res) => {
   const { account_no, bank_name, ifsc } = req.body;
   try {
     await pool.query(
-      'insert into account(account_no,bank_name,ifsc,userid) values($1,$2,$3,$4)',
+      'INSERT INTO account (account_no, bank_name, ifsc, userid) VALUES ($1, $2, $3, $4)',
       [account_no, bank_name, ifsc, req.user.userid]
     );
     res.status(201).send();
   } catch (error) {
-    res.send({
+    res.status(500).send({
       add_error: 'Error while adding new account..Try again later.'
     });
   }
 });
 
-Router.patch('/account', authMiddleware, async (req, res) => {
+router.patch('/account', authMiddleware, async (req, res) => {
   const { ifsc } = req.body;
   try {
     const result = await pool.query(
-      'update account set ifsc=$1 where userid=$2 returning *',
+      'UPDATE account SET ifsc=$1 WHERE userid=$2 RETURNING *',
       [ifsc, req.user.userid]
     );
     res.send({ account: result.rows[0] });
   } catch (error) {
-    res.send({
+    res.status(500).send({
       update_error: 'Error while updating account..Try again later.'
     });
   }
 });
 
-module.exports = { Router, getAccountByAccountId };
+module.exports = router; // Doğru export

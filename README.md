@@ -1,169 +1,70 @@
-# Customer Management System
+# Getting Started with Create React App
 
-This project is a Customer Management System built with a React frontend, an Express.js backend, and PostgreSQL for the database. The system supports customer registration, querying, status management (active/passive), and more. 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Table of Contents
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Running the Application](#running-the-application)
-- [Usage](#usage)
-- [Features](#features)
-- [API Endpoints](#api-endpoints)
-- [Frontend Components](#frontend-components)
-- [License](#license)
+## Available Scripts
 
-## Project Structure
+In the project directory, you can run:
 
-```
-/project-root
-│
-├── backend (server)
-│   ├── db
-│   │   └── connect.js
-│   ├── middleware
-│   │   └── auth.js
-│   ├── node_modules
-│   ├── routes
-│   │   ├── account.js
-│   │   ├── auth.js
-│   │   ├── customer.js
-│   │   ├── customerController.js
-│   │   ├── newCustomer.js
-│   │   ├── profile.js
-│   │   └── transactions.js
-│   ├── utils
-│   │   ├── api.js
-│   │   └── common.js
-│   ├── .env
-│   ├── index.js
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── scripts.sql
-│   └── yarn.lock
-│
-├── frontend (src)
-│   ├── actions
-│   │   ├── auth.js
-│   │   ├── errors.js
-│   │   ├── profile.js
-│   │   └── transactions.js
-│   ├── components
-│   │   ├── AccountOperations.js
-│   │   ├── CustomerInfo.js
-│   │   ├── Dashboard.css
-│   │   ├── Dashboard.js
-│   │   ├── Header.js
-│   │   ├── Login.css
-│   │   ├── Login.js
-│   │   ├── Logout.js
-│   │   ├── NewCustomer.js
-│   │   └── Profile.js
-│   ├── CSS
-│   │   └── main.scss
-│   ├── reducers
-│   │   ├── account.js
-│   │   ├── auth.js
-│   │   ├── errors.js
-│   │   ├── profile.js
-│   │   └── transactions.js
-│   ├── router
-│   │   └── AppRouter.js
-│   ├── store
-│   │   └── store.js
-│   ├── utils
-│   │   └── index.js
-│   ├── .env
-│   ├── .gitignore
-│   ├── package-lock.json
-│   ├── package.json
-│   ├── README.md
-│   ├── webpack.config.js
-│   └── yarn.lock
-```
+### `npm start`
 
-## Installation
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### Backend
-1. Navigate to the `backend` directory:
-   ```bash
-   cd backend
-   ```
-2. Install the dependencies:
-   ```bash
-   yarn install
-   ```
-3. Set up the PostgreSQL database using the provided `scripts.sql` file.
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-### Frontend
-1. Navigate to the `frontend` directory:
-   ```bash
-   cd frontend
-   ```
-2. Install the dependencies:
-   ```bash
-   yarn install
-   ```
+### `npm test`
 
-## Configuration
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### Backend
-- Create a `.env` file in the `backend` directory with the following variables:
-  ```
-  PORT=5000
-  DATABASE_URL=your_postgres_connection_string
-  JWT_SECRET=your_jwt_secret
-  ```
+### `npm run build`
 
-### Frontend
-- Create a `.env` file in the `frontend` directory with the following variables:
-  ```
-  REACT_APP_API_URL=http://localhost:5000/api
-  ```
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-## Running the Application
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-### Backend
-Start the Express server:
-```bash
-yarn start
-```
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### Frontend
-Start the React development server:
-```bash
-yarn start
-```
+### `npm run eject`
 
-## Usage
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-- **New Customer Registration**: Navigate to the `NewCustomer` screen to register new customers.
-- **Customer Information Query**: Use the `CustomerInfo` screen to query customers by TCKN and manage their status.
-- **User Management**: Use the dashboard to perform actions like updating, activating, or deactivating users.
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## Features
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-- **Customer Registration**: Validate and store customer details, including TCKN, name, date of birth, and more.
-- **Status Management**: Activate or deactivate users instead of deleting them from the database.
-- **User Authentication**: Secure login with JWT.
-- **Filtering**: Filter users based on active or passive status.
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## API Endpoints
+## Learn More
 
-- **POST /api/auth/login**: User login.
-- **POST /api/customers**: Register a new customer.
-- **GET /api/customers**: Query customers by TCKN.
-- **PATCH /api/customers/:id/status**: Update customer status.
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-## Frontend Components
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-- **Dashboard.js**: The main dashboard where users can manage customers.
-- **CustomerInfo.js**: Component for querying and displaying customer information.
-- **NewCustomer.js**: Component for registering new customers.
-- **Login.js**: Component for user login.
+### Code Splitting
 
-## License
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-This project is licensed under the MIT License.
+### Analyzing the Bundle Size
 
----
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
