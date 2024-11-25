@@ -1,129 +1,144 @@
-import React from 'react';
-import _ from 'lodash';
-import { connect } from 'react-redux';
-import { Form, Button } from 'react-bootstrap';
-import { initiateUpdateProfile } from '../actions/profile';
-import { validateFields } from '../utils/common';
-import { resetErrors } from '../actions/errors';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import LockIcon from '@mui/icons-material/Lock';
+import { Container, Typography, Button } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-class Profile extends React.Component {
-  state = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    errorMsg: '',
-    isSubmitted: false
+export default function Login() {
+  const [personnelId, setPersonnelId] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [errorMsg, setErrorMsg] = React.useState('');
+  const [successMsg, setSuccessMsg] = React.useState('');
+  const navigate = useNavigate(); // Correctly define navigate
+
+  const validatePersonnelId = (id) => {
+    return /^\d{11}$/.test(id);
   };
 
-  componentDidMount() {
-    const { profile } = this.props;
-    if (!_.isEmpty(profile)) {
-      const { first_name, last_name, email } = profile;
-      this.setState({
-        first_name,
-        last_name,
-        email
-      });
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.errors, this.props.errors)) {
-      this.setState({
-        errorMsg: this.props.errors
-      });
-    }
-    if (!_.isEqual(prevProps.profile, this.props.profile)) {
-      const { first_name, last_name, email } = this.props.profile;
-      this.setState({ first_name, last_name, email });
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(resetErrors());
-  }
-
-  handleSubmit = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    const { first_name, last_name } = this.state;
-    const profileData = {
-      first_name,
-      last_name
-    };
-
-    const fieldsToValidate = [{ first_name }, { last_name }];
-
-    const allFieldsEntered = validateFields(fieldsToValidate);
-    if (!allFieldsEntered) {
-      this.setState({
-        errorMsg: {
-          update_error: 'Please enter all the fields.'
-        }
-      });
+    if (!validatePersonnelId(personnelId)) {
+      setErrorMsg('Personel ID 11 haneli ve sadece rakamlardan oluşmalıdır.');
+      setSuccessMsg('');
+    } else if (!password) {
+      setErrorMsg('Şifre boş olamaz.');
+      setSuccessMsg('');
     } else {
-      this.setState({ isSubmitted: true, errorMsg: '' });
-      this.props.dispatch(initiateUpdateProfile(profileData));
+      try {
+        const response = await axios.post('http://localhost:3000/api/signin', {
+          personel_id: personnelId,
+          password,
+        });
+        localStorage.setItem('user_token', response.data.token);
+        setSuccessMsg('Giriş başarılı!');
+        setErrorMsg('');
+        navigate('/dashboard');
+      } catch (error) {
+        if (error.response) {
+          console.error('Response error:', error.response.data);
+          setErrorMsg('Geçersiz Personel ID veya şifre.');
+        } else if (error.request) {
+          console.error('Request error:', error.request);
+        } else {
+          console.error('Error', error.message);
+        }
+        setSuccessMsg('');
+      }
     }
   };
 
-  handleOnChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-
-  render() {
-    const { errorMsg, first_name, last_name, email, isSubmitted } = this.state;
-    return (
-      <div className="col-md-6 offset-md-3">
-        <Form onSubmit={this.handleSubmit} className="profile-form">
-          {errorMsg && errorMsg.update_error ? (
-            <p className="errorMsg centered-message">{errorMsg.update_error}</p>
-          ) : (
-            isSubmitted && (
-              <p className="successMsg centered-message">
-                Profile updated successfully.
-              </p>
-            )
+  return (
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+          Personel Giriş Ekranı
+        </Typography>
+        <Box component="form" onSubmit={handleLogin} sx={{ width: '100%' }}>
+          {successMsg && (
+            <Typography color="success.main" align="center" sx={{ mb: 2 }}>
+              {successMsg}
+            </Typography>
           )}
-          <Form.Group controlId="email">
-            <Form.Label>Email address:</Form.Label>
-            <span className="label-value">{email}</span>
-          </Form.Group>
-          <Form.Group controlId="first_name">
-            <Form.Label>First name:</Form.Label>
-            <Form.Control
-              type="text"
-              name="first_name"
-              placeholder="Enter your first name"
-              value={first_name}
-              onChange={this.handleOnChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="last_name">
-            <Form.Label>Last name:</Form.Label>
-            <Form.Control
-              type="text"
-              name="last_name"
-              placeholder="Enter your last name"
-              value={last_name}
-              onChange={this.handleOnChange}
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-      </div>
-    );
-  }
+          {errorMsg && (
+            <Typography color="error.main" align="center" sx={{ mb: 2 }}>
+              {errorMsg}
+            </Typography>
+          )}
+          <TextField
+            id="personnelId"
+            label="Personel ID"
+            value={personnelId}
+            onChange={(e) => setPersonnelId(e.target.value)}
+            variant="standard"
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+              inputProps: {
+                pattern: "\\d{11}",
+                title: "11 haneli bir personel ID giriniz."
+              }
+            }}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            id="password"
+            label="Şifre"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            variant="standard"
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 2 }}
+          />
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+            >
+              Giriş Yap
+            </Button>
+            <Button
+              fullWidth
+              variant="text"
+              color="secondary"
+              component={Link}
+              to="/register"
+            >
+              Hesap Oluştur
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </Container>
+  );
 }
-
-const mapStateToProps = (state) => ({
-  profile: state.profile,
-  errors: state.errors
-});
-
-export default connect(mapStateToProps)(Profile);

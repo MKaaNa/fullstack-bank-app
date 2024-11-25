@@ -1,109 +1,121 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import _ from 'lodash';
-import { Form, Button } from 'react-bootstrap';
-import { initiateLogin } from '../actions/auth';
-import { resetErrors } from '../actions/errors';
-import { validateFields } from '../utils/common';
-import { Link } from 'react-router-dom';
-import './Login.css'; // CSS dosyasını import edin
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import LockIcon from '@mui/icons-material/Lock';
+import { Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_API_URL } from '../utils/constants';
+import './Login.css'; 
 
-class Login extends React.Component {
-  state = {
-    email: '',
-    password: '',
-    errorMsg: ''
+export default function Login() {
+  const [personnelId, setPersonnelId] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [errorMsg, setErrorMsg] = React.useState('');
+  const [successMsg, setSuccessMsg] = React.useState('');
+  const navigate = useNavigate();
+
+  const validatePersonnelId = (id) => {
+    return /^\d{11}$/.test(id);
   };
 
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.errors, this.props.errors)) {
-      this.setState({ errorMsg: this.props.errors });
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(resetErrors());
-  }
-
-  handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    const { email, password } = this.state;
-    const fieldsToValidate = [{ email }, { password }];
-
-    const allFieldsEntered = validateFields(fieldsToValidate);
-    if (!allFieldsEntered) {
-      this.setState({
-        errorMsg: {
-          signin_error: 'Please enter all the fields.'
-        }
-      });
+    if (!validatePersonnelId(personnelId)) {
+      setErrorMsg('Personel ID 11 haneli ve sadece rakamlardan oluşmalıdır.');
+      setSuccessMsg('');
+    } else if (!password) {
+      setErrorMsg('Şifre boş olamaz.');
+      setSuccessMsg('');
     } else {
-      this.setState({
-        errorMsg: {
-          signin_error: ''
-        }
-      }); 
-      // login successful
-      this.props.dispatch(initiateLogin(email, password));
+      try {
+        const response = await axios.post(`${BASE_API_URL}/api/auth/signin`, { personel_id: personnelId, password });
+        localStorage.setItem('user_token', response.data.token);
+        const { first_name, last_name } = response.data;
+
+        localStorage.setItem('first_name', first_name);
+        localStorage.setItem('last_name', last_name);
+
+        setSuccessMsg('Giriş başarılı!');
+        setErrorMsg('');
+        navigate('/dashboard');
+      } catch (error) {
+        setErrorMsg('Geçersiz Personel ID veya şifre.');
+        setSuccessMsg('');
+      }
     }
   };
 
-  handleInputChange = (event) => {
-    const { name, value } = event.target;
-
-    this.setState({
-      [name]: value
-    });
-  };
-
-  render() {
-      const { errorMsg } = this.state;
-    return (
-      <div className="login-page">
-        <div className="login-form-container">
-          <h1>Banking Application</h1>
-          <Form onSubmit={this.handleLogin}>
-            {errorMsg && errorMsg.signin_error && (
-              <p className="errorMsg centered-message">
-                {errorMsg.signin_error}
-              </p>
-            )}
-            <Form.Group className="form-input" controlId="email">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder="Enter email"
-                onChange={this.handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group className="form-input" controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder="Enter password"
-                onChange={this.handleInputChange}
-              />
-            </Form.Group>
-            <div className="action-buttons">
-              <Button className="btn login-btn" type="submit">
-                Login
-              </Button>
-              <Button className="btn create-account-btn">
-                <Link to="/register" className="register-text">
-                  Create account
-                </Link>
-              </Button>
-            </div>
-          </Form>
-        </div>
+  return (
+    <div className="login-page">
+      <div className="login-form-container">
+        <Typography component="h1" variant="h5" className="login-title">
+          Personel Giriş Ekranı
+        </Typography>
+        <Box component="form" onSubmit={handleLogin} sx={{ width: '100%' }}>
+          {successMsg && (
+            <Typography className="successMsg" align="center">
+              {successMsg}
+            </Typography>
+          )}
+          {errorMsg && (
+            <Typography className="errorMsg" align="center">
+              {errorMsg}
+            </Typography>
+          )}
+          <TextField
+            id="personnelId"
+            label="Personel ID"
+            value={personnelId}
+            onChange={(e) => setPersonnelId(e.target.value)}
+            variant="outlined"
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+              inputProps: {
+                pattern: "\\d{11}",
+                title: "11 haneli bir personel ID giriniz."
+              }
+            }}
+            sx={{ mb: 2 }}
+            size="small"
+          />
+          <TextField
+            id="password"
+            label="Şifre"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            variant="outlined"
+            fullWidth
+            required
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 2 }}
+            size="small"
+          />
+          <Box className="action-buttons">
+            <Button
+              type="submit"
+              className="login-btn"
+            >
+              Giriş Yap
+            </Button>
+          </Box>
+        </Box>
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-const mapStateToProps = (state) => ({
-  errors: state.errors
-});
-export default connect(mapStateToProps)(Login);

@@ -8,29 +8,36 @@ const isInvalidField = (receivedFields, validFieldsToUpdate) => {
   );
 };
 
-const validateUser = async (email, password) => {
-  const result = await pool.query(
-    'select userid,  email, password from bank_user where email = $1',
-    [email]
-  );
-  const user = result.rows[0];
-  if (user) {
-    const isMatch = await bcrypt.compare(password, user.password);
+const validateUser = async (personelId, password) => {
+  try {
+    
+    const result = await pool.query('SELECT * FROM bank_user WHERE personel_id = $1', [personelId]);
+    
+    const user = result.rows[0];
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+   
+    const isMatch = password == user.password;
+  
+    
     if (isMatch) {
-      delete user.password;
       return user;
     } else {
-      throw new Error();
+      throw new Error('Password does not match');
     }
-  } else {
-    throw new Error();
+  } catch (error) {
+    console.error('Validation error:', error);
+    throw new Error(`Validation error: ${error.message}`);
   }
 };
 
 const generateAuthToken = async (user) => {
-  const { userid, email } = user;
-  const secret = process.env.secret;
-  const token = await jwt.sign({ userid, email }, secret);
+  const { userid, personel_id } = user;
+  const secret = process.env.SECRET;
+  
+  const token = await jwt.sign({ userid, personel_id }, secret);
   return token;
 };
 

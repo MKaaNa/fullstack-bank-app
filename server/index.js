@@ -1,22 +1,28 @@
 const express = require('express');
 const cors = require('cors');
-const authRoute = require('./routes/auth');
-const profileRoute = require('./routes/profile');
-const accountRoute = require('./routes/account');
-const transactionsRoute = require('./routes/transactions');
-require('dotenv').config();
-
 const app = express();
-const PORT = process.env.PORT || 5005;
+//
+
+const accountRouter = require('./routes/account'); // Hesap route'ları
+const authRouter = require('./routes/auth'); // Kimlik doğrulama route'ları
+const newCustomerRouter = require('./routes/newCustomer'); // Yeni müşteri route'ları
+const customerRouter = require('./routes/customer');
+
 
 app.use(express.json());
 app.use(cors());
-app.use(accountRoute.Router);
-app.use(authRoute);
-app.use(profileRoute);
-app.use(transactionsRoute);
 
+// Route'ları tanımlayın
+app.use('/api/accounts', accountRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/newcustomer', newCustomerRouter); // Yeni müşteri route'ları
+app.use('/api/musteri', customerRouter); // Bu satırın doğru olduğundan emin olun
 
+const PORT = process.env.PORT || 5005;
 app.listen(PORT, () => {
-  console.log(`server started on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
+
+
+
+

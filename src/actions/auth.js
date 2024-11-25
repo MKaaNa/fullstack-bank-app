@@ -10,24 +10,30 @@ export const signIn = (user) => ({
   user
 });
 
-export const initiateLogin = (email, password) => {
+export const initiateLogin = (personnelId, password) => {
   return async (dispatch) => {
     try {
-      const result = await axios.post(`${BASE_API_URL}/signin`, {
-        email,
+      const result = axios.post(`${BASE_API_URL}/signin`, {
+        personnelId,
         password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
+      
       const user = result.data;
-      localStorage.setItem('token', user.token);
+      localStorage.setItem('user_token', user.token);
       dispatch(signIn(user));
-      dispatch(initiateGetProfile(user.email));
-      history.push('/profile');
+      dispatch(initiateGetProfile(user.personnelId));
+      history.push('/dashboard'); // Redirect to dashboard
     } catch (error) {
       console.log('error', error);
       error.response && dispatch(getErrors(error.response.data));
     }
   };
 };
+
 
 export const registerNewUser = (data) => {
   return async (dispatch) => {
@@ -52,12 +58,10 @@ export const initiateLogout = () => {
       setAuthHeader();
       await axios.post(`${BASE_API_URL}/logout`);
       removeAuthHeader();
-      localStorage.removeItem('token');
+      localStorage.removeItem('user_token');
       return dispatch(signOut());
     } catch (error) {
       error.response && dispatch(getErrors(error.response.data));
     }
   };
 };
-
-
